@@ -5,18 +5,18 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="talisestools",
-    version="0.0.1",
+    version="0.0.3",
     author="Sascha Vowe",
     author_email="vowe@mail.de",
     description="Tools for handling TAELISES generated binary data",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/savowe/talisestools",
-    packages=setuptools.find_packages(),
+    packages=['talisestools'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.1',
+    python_requires='>=3.6',
 )

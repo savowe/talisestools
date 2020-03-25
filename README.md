@@ -1,1 +1,2 @@
-Tools for handling TAELISES generated binary data
+# TALISES Tools
+Tools for handling TALISES generated binary data
