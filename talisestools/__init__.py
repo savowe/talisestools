@@ -13,8 +13,8 @@ def readbin(input_files, save=False):
 
     fh = open(input_files, 'rb' )
     print("Read file: "+input_files)
-    header_raw = fh.read(calcsize("llllllliidddddddddddddd"))
-    header = unpack( "llllllliidddddddddddddd", header_raw )
+    header_raw = fh.read(calcsize("llllllliiddddddddddddddiidd"))
+    header = unpack( "llllllliiddddddddddddddiidd", header_raw )
     nDims = header[3]
     nDimX = header[4]
     nDimY = header[5]
@@ -34,6 +34,8 @@ def readbin(input_files, save=False):
     dky   = header[20]
     dkz   = header[21]
     dt    = header[22]
+    L     = header[25]
+    T     = header[26]
 
     if ( header[0] != 1380 ):
         print( "Invalid file format." )
@@ -57,8 +59,8 @@ def readbin(input_files, save=False):
         t = zeros(Nt)
         for n in range(0,Nt):
             fh.seek(n*(header[0]+nDimX*cmplxsize)) # go to beginning of file
-            header_raw = fh.read(calcsize("llllllliidddddddddddddd"))
-            header = unpack( "llllllliidddddddddddddd", header_raw )
+            header_raw = fh.read(calcsize("llllllliiddddddddddddddiidd"))
+            header = unpack( "llllllliiddddddddddddddiidd", header_raw )
             t[n] = header[9]
             fh.seek(n*(header[0]+nDimX*cmplxsize))
             fh.seek(header[0], 1) #skip header file relative to above position
@@ -68,10 +70,10 @@ def readbin(input_files, save=False):
                 data[i,n] = complex(cmplxno[0],cmplxno[1])
         if save == True:
             import scipy.io as sio
-            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 'L': L, 'T': T, 't': t} )
             print(newfilename+" created.")
 
-        return {'wavefunction': data, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 't': t}
+        return {'wavefunction': data, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 'L': L, 'T': T, 't': t}
 
     if (nDims == 2):
         Nt = int(data_length/(header[0]+nDimX*DimY*cmplxsize)) #Number of time-steps in file
@@ -79,8 +81,8 @@ def readbin(input_files, save=False):
         t = zeros(Nt)
         for n in range(0,Nt):
             fh.seek(n*(header[0]+nDimX*DimY*cmplxsize)) # go to beginning of file
-            header_raw = fh.read(calcsize("llllllliidddddddddddddd"))
-            header = unpack( "llllllliidddddddddddddd", header_raw )
+            header_raw = fh.read(calcsize("llllllliiddddddddddddddiidd"))
+            header = unpack( "llllllliiddddddddddddddiidd", header_raw )
             t[n] = header[9]
             fh.seek(n*(header[0]+nDimX*DimY*cmplxsize))
             fh.seek(header[0], 1) #skip header file relative to above position
@@ -95,9 +97,9 @@ def readbin(input_files, save=False):
             print("yrange = (%g,%g)" % (yMin,yMax))
             print("t = %g" % (t))
             import scipy.io as sio
-            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t} )
             print(newfilename+" created.")
-        return {'wavefunction': data, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 't': t}
+        return {'wavefunction': data, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t}
             
         
     fh.close()
