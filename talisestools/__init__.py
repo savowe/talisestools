@@ -1,7 +1,8 @@
 from struct import unpack, calcsize
 from sys import argv
 from os.path import splitext
-from numpy import zeros, complex_, abs, power, arange
+from os import listdir, getcwd, path
+from numpy import zeros, complex_, abs, power, arange, concatenate, empty
 from matplotlib import pyplot as plt
 
 def readbin(input_files, save=False):
@@ -97,9 +98,84 @@ def readbin(input_files, save=False):
             print(newfilename+" created.")
         return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t}
             
+    if (nDims == 3):
+        Nt = int(data_length/(header[0]+nDimX*nDimY*nDimZ*cmplxsize)) #Number of time-steps in file
+        data = zeros((nDimX,nDimY,nDimZ,Nt),dtype=complex_) 
+        t = zeros(Nt)
+        for n in range(0,Nt):
+            fh.seek(n*(header[0]+nDimX*nDimY*nDimZ*cmplxsize)) # go to beginning of file
+            header_raw = fh.read(calcsize("llllllliiddddddddddddddiidd"))
+            header = unpack( "llllllliiddddddddddddddiidd", header_raw )
+            t[n] = header[9]
+            fh.seek(n*(header[0]+nDimX*nDimY*nDimZ*cmplxsize))
+            fh.seek(header[0], 1) #skip header file relative to above position
+            for i in range(0, nDimX):
+                for j in range(0, nDimY):
+                    for k in range(0, nDimZ):
+                        rawcplxno = fh.read(cmplxsize)
+                        cmplxno = unpack( "dd", rawcplxno )
+                        data[k,j,i,n] = complex(cmplxno[0],cmplxno[1])
+        if save == True:
+            import scipy.io as sio
+            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t} )
+            print(newfilename+" created.")
+        return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t}
         
     fh.close()
 
+def readall(n_int_state, directory=path.abspath(getcwd()), save=False):
+    # search, read and append data
+    file_list = []
+    file_list = [f for f in listdir(directory) if f.endswith(str(n_int_state)+'.bin')]
+    data = []
+    for i in range(0, len(file_list)):
+        data.append(readbin(file_list[i]))
+
+    # concatenate psi and time
+    psi = data[0]["wavefunction"]
+    t = data[0]["t"]
+    for i in range(1, len(file_list)):
+        t = concatenate((t, data[i]["t"]))
+        psi = concatenate((psi, data[1]["wavefunction"]), axis=data[0]["nDims"])
+
+    # sort after time
+    sorted_inds = t.argsort()
+    sorted_t = empty(shape=t.shape)
+    sorted_psi = empty(shape=psi.shape,dtype=complex_)
+    if data[0]["nDims"] == 1:
+        for i in range(0, len(t)):
+            sorted_psi[:,i] = psi[:,sorted_inds[i]]
+            sorted_t[i] = t[sorted_inds[i]]
+        if save == True:
+            import scipy.io as sio
+            newfilename = directory + str(n_int_state) + ".mat"
+            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'xMin': data[0]["xMin"], 'xMax': data[0]["xMax"], 'dx': data[0]["dx"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} )
+            print(newfilename+" created.")
+
+        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'xMin': data[0]["xMin"], 'xMax': data[0]["xMax"], 'dx': data[0]["dx"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t}
+
+
+    if data[0]["nDims"] == 2:
+        for i in range(0, len(t)):
+            sorted_psi[:,:,i] = psi[:,:,sorted_inds[i]]
+            sorted_t[i] = t[sorted_inds[i]]
+        if save == True:
+            import scipy.io as sio
+            newfilename = directory + str(n_int_state) + ".mat"
+            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} )
+            print(newfilename+" created.")
+        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} 
+
+    if data[0]["nDims"] == 3:
+        for i in range(0, len(t)):
+            sorted_psi[:,:,:,i] = psi[:,:,:,sorted_inds[i]]
+            sorted_t[i] = t[sorted_inds[i]]
+        if save == True:
+            import scipy.io as sio
+            newfilename = directory + str(n_int_state) + ".mat"
+            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'nDimZ': data[0]["nDimZ"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'zMin': data[0]["zMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'zMax': data[0]["zMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'dz': data[0]["dz"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} )
+            print(newfilename+" created.")
+        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'nDimZ': data[0]["nDimZ"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'zMin': data[0]["zMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'zMax': data[0]["zMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'dz': data[0]["dz"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t}
 
 
 def plotbin(filename):
