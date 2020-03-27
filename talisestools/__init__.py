@@ -197,7 +197,7 @@ def plotbin(filename):
     if data["nDims"]==2:
         x = arange(data["xMin"], data["xMax"], data["dx"])
         y = arange(data["yMin"], data["yMax"], data["dy"])
-        psi2= abs(power(data["wavefunction"][:,:],2))
+        psi2= abs(power(data["wavefunction"][:,:,0],2))
         plt.title(r"$|\Psi |^2$ at t="+str(data["t"][0]))
         plt.ylabel("y")
         plt.xlabel("x")
