@@ -77,7 +77,7 @@ def readbin(input_files, save=False):
 
     if (nDims == 2):
         Nt = int(data_length/(header[0]+nDimX*nDimY*cmplxsize)) #Number of time-steps in file
-        data = zeros((nDimX,nDimY),dtype=complex_) 
+        data = zeros((nDimX,nDimY,Nt),dtype=complex_) 
         t = zeros(Nt)
         for n in range(0,Nt):
             fh.seek(n*(header[0]+nDimX*nDimY*cmplxsize)) # go to beginning of file
@@ -90,12 +90,8 @@ def readbin(input_files, save=False):
                 for j in range(0, nDimY):
                     rawcplxno = fh.read(cmplxsize)
                     cmplxno = unpack( "dd", rawcplxno )
-                    data[j,i] = complex(cmplxno[0],cmplxno[1])
+                    data[j,i,n] = complex(cmplxno[0],cmplxno[1])
         if save == True:
-            print("dims = (%ld,%ld,%ld)" % (nDimX,nDimY,nDimZ))
-            print("xrange = (%g,%g)" % (xMin,xMax))
-            print("yrange = (%g,%g)" % (yMin,yMax))
-            print("t = %g" % (t))
             import scipy.io as sio
             sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t} )
             print(newfilename+" created.")
@@ -103,6 +99,7 @@ def readbin(input_files, save=False):
             
         
     fh.close()
+
 
 
 def plotbin(filename):

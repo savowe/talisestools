@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="talisestools",
-    version="0.0.7",
+    version="0.0.8",
     author="Sascha Vowe",
     author_email="vowe@mail.de",
     description="Tools for handling TAELISES generated binary data",
