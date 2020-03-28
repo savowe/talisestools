@@ -136,7 +136,7 @@ def readall(n_int_state, directory=path.abspath(getcwd()), save=False):
     t = data[0]["t"]
     for i in range(1, len(file_list)):
         t = concatenate((t, data[i]["t"]))
-        psi = concatenate((psi, data[1]["wavefunction"]), axis=data[0]["nDims"])
+        psi = concatenate((psi, data[i]["wavefunction"]), axis=data[0]["nDims"])
 
     # sort after time
     sorted_inds = t.argsort()
