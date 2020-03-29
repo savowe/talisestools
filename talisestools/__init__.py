@@ -149,10 +149,10 @@ def readall(n_int_state, directory=path.abspath(getcwd()), save=False):
         if save == True:
             import scipy.io as sio
             newfilename = directory + str(n_int_state) + ".mat"
-            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'xMin': data[0]["xMin"], 'xMax': data[0]["xMax"], 'dx': data[0]["dx"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'xMin': data[0]["xMin"], 'xMax': data[0]["xMax"], 'dx': data[0]["dx"], 'L': data[0]["M"], 'T': data[0]["T_scale"], 't': t} )
             print(newfilename+" created.")
 
-        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'xMin': data[0]["xMin"], 'xMax': data[0]["xMax"], 'dx': data[0]["dx"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t}
+        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'xMin': data[0]["xMin"], 'xMax': data[0]["xMax"], 'dx': data[0]["dx"], 'L': data[0]["M"], 'T': data[0]["T_scale"], 't': t}
 
 
     if data[0]["nDims"] == 2:
@@ -162,9 +162,9 @@ def readall(n_int_state, directory=path.abspath(getcwd()), save=False):
         if save == True:
             import scipy.io as sio
             newfilename = directory + str(n_int_state) + ".mat"
-            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'L': data[0]["M"], 'T': data[0]["T_scale"], 't': t} )
             print(newfilename+" created.")
-        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} 
+        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'L': data[0]["M"], 'T': data[0]["T_scale"], 't': t} 
 
     if data[0]["nDims"] == 3:
         for i in range(0, len(t)):
@@ -173,9 +173,9 @@ def readall(n_int_state, directory=path.abspath(getcwd()), save=False):
         if save == True:
             import scipy.io as sio
             newfilename = directory + str(n_int_state) + ".mat"
-            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'nDimZ': data[0]["nDimZ"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'zMin': data[0]["zMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'zMax': data[0]["zMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'dz': data[0]["dz"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'nDimZ': data[0]["nDimZ"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'zMin': data[0]["zMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'zMax': data[0]["zMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'dz': data[0]["dz"], 'L': data[0]["M"], 'T': data[0]["T_scale"], 't': t} )
             print(newfilename+" created.")
-        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'nDimZ': data[0]["nDimZ"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'zMin': data[0]["zMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'zMax': data[0]["zMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'dz': data[0]["dz"], 'L': data[0]["L"], 'T': data[0]["T"], 't': t}
+        return {'wavefunction': psi, 'nDims': data[0]["nDims"], 'nDimX': data[0]["nDimX"], 'nDimY': data[0]["nDimY"], 'nDimZ': data[0]["nDimZ"], 'xMin': data[0]["xMin"], 'yMin': data[0]["yMin"], 'zMin': data[0]["zMin"], 'xMax': data[0]["xMax"], 'yMax': data[0]["yMax"], 'zMax': data[0]["zMax"], 'dx': data[0]["dx"], 'dy': data[0]["dy"], 'dz': data[0]["dz"], 'L': data[0]["M"], 'T': data[0]["T_scale"], 't': t}
 
 
 def plotbin(filename):
