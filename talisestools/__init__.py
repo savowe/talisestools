@@ -35,8 +35,8 @@ def readbin(input_files, save=False):
     dky   = header[20]
     dkz   = header[21]
     dt    = header[22]
-    L     = header[25]
-    T     = header[26]
+    M     = header[25]
+    T_scale = header[26]
 
     if ( header[0] != 1380 ):
         print( "Invalid file format." )
@@ -71,10 +71,10 @@ def readbin(input_files, save=False):
                 data[i,n] = complex(cmplxno[0],cmplxno[1])
         if save == True:
             import scipy.io as sio
-            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 'L': L, 'T': T, 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 'M': M, 'T_scale': T_scale, 't': t} )
             print(newfilename+" created.")
 
-        return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 'L': L, 'T': T, 't': t}
+        return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'xMin': xMin, 'xMax': xMax, 'dx': dx, 'M': M, 'T_scale': T_scale, 't': t}
 
     if (nDims == 2):
         Nt = int(data_length/(header[0]+nDimX*nDimY*cmplxsize)) #Number of time-steps in file
@@ -94,9 +94,9 @@ def readbin(input_files, save=False):
                     data[j,i,n] = complex(cmplxno[0],cmplxno[1])
         if save == True:
             import scipy.io as sio
-            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'M': M, 'T_scale': T_scale, 't': t} )
             print(newfilename+" created.")
-        return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t}
+        return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'M': M, 'T_scale': T_scale, 't': t}
             
     if (nDims == 3):
         Nt = int(data_length/(header[0]+nDimX*nDimY*nDimZ*cmplxsize)) #Number of time-steps in file
@@ -117,9 +117,9 @@ def readbin(input_files, save=False):
                         data[k,j,i,n] = complex(cmplxno[0],cmplxno[1])
         if save == True:
             import scipy.io as sio
-            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t} )
+            sio.savemat(newfilename, mdict={'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'M': M, 'T_scale': T_scale, 't': t} )
             print(newfilename+" created.")
-        return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'L': L, 'T': T, 't': t}
+        return {'wavefunction': data, 'nDims': nDims, 'nDimX': nDimX, 'nDimY': nDimY, 'xMin': xMin, 'yMin': yMin, 'xMax': xMax, 'yMax': yMax, 'dx': dx, 'dy': dy, 'M': M, 'T_scale': T_scale, 't': t}
         
     fh.close()
 
