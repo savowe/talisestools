@@ -78,7 +78,7 @@ def readbin(input_files, save=False):
 
     if (nDims == 2):
         Nt = int(data_length/(header[0]+nDimX*nDimY*cmplxsize)) #Number of time-steps in file
-        data = zeros((nDimX,nDimY,Nt),dtype=complex_) 
+        data = zeros((nDimY,nDimX,Nt),dtype=complex_) 
         t = zeros(Nt)
         for n in range(0,Nt):
             fh.seek(n*(header[0]+nDimX*nDimY*cmplxsize)) # go to beginning of file
@@ -100,7 +100,7 @@ def readbin(input_files, save=False):
             
     if (nDims == 3):
         Nt = int(data_length/(header[0]+nDimX*nDimY*nDimZ*cmplxsize)) #Number of time-steps in file
-        data = zeros((nDimX,nDimY,nDimZ,Nt),dtype=complex_) 
+        data = zeros((nDimZ,nDimY,nDimX,Nt),dtype=complex_) 
         t = zeros(Nt)
         for n in range(0,Nt):
             fh.seek(n*(header[0]+nDimX*nDimY*nDimZ*cmplxsize)) # go to beginning of file
